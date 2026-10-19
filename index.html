@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="一次搜索失败之后的贝叶斯更新：基于 350 份问卷的《概率论与数理统计》课程叙事网页。" />
+<title>没找到，然后呢？｜一次搜索失败之后的贝叶斯更新</title>
+<link rel="preload" as="image" href="cover-night.webp" />
+<link href="style.css?v=3" rel="stylesheet" />
+</head>
+<body>
+<div class="paper-atmosphere" aria-hidden="true">
+  <div class="paper-layer" data-paint="dorm" style="opacity:1"></div>
+  <div class="paper-layer" data-paint="campus" style="opacity:0"></div>
+  <div class="paper-layer" data-paint="grid" style="opacity:0"></div>
+  <div class="paper-layer" data-paint="ledger" style="opacity:0"></div>
+  <div class="paper-layer" data-paint="archive" style="opacity:0"></div>
+  <div class="paper-layer" data-paint="dawn" style="opacity:0"></div>
+</div>
+
+<header class="preview-bar">
+  <strong>没找到，然后呢？</strong>
+  <span class="bar-meta">概率论与数理统计 · 课程叙事 · N=350</span>
+  <details class="reading-menu">
+    <summary>目录</summary>
+    <nav aria-label="章节目录">
+      <a href="#top">封面</a>
+      <a href="#opening">序 · 耳机不见了</a>
+      <a href="#instinct">PART 01 · 没找到，等于不在吗</a>
+      <a href="#bayes">PART 02 · 失败如何改写答案</a>
+      <a href="#strategy">PART 03 · 然后去哪里找</a>
+      <a href="#evidence">PART 04 · 350 份问卷的证据</a>
+      <a href="#ending">尾声 · 失败是证据</a>
+      <a href="#appendix">附录 · 公式与数据</a>
+    </nav>
+  </details>
+</header>
+
+<!-- ============ 封面（1920×1080 画布） ============ -->
+<div class="landscape-frame" id="top">
+  <section class="cover-page landscape-canvas" aria-label="封面">
+    <div class="cover-copy">
+      <p class="eyebrow">概率论与数理统计 · 条件概率与贝叶斯公式</p>
+      <h1 class="cover-title">没找到，<em>然后呢？</em></h1>
+      <p class="cover-sub">一次搜索失败之后，概率如何被改写</p>
+      <p class="cover-deck">耳机不见了。你把图书馆翻了一遍，什么也没找到。「没找到」这三个字，究竟是「不在」的证明，还是一条需要计算的证据？我们用一道题、一次演示和 350 份问卷，把这门课最核心的一次「更新」讲清楚。</p>
+      <div class="cover-actions">
+        <button class="action-button" id="start-search" type="button" aria-haspopup="dialog" aria-controls="search-dialog">先替你找一次耳机 <span>↗</span></button>
+        <a class="quiet-link" href="#opening">直接阅读 ↓</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 序章 ============ -->
+<div class="chapter-shell" id="opening">
+  <section class="reading-width reading-chapter" data-paint-marker="campus">
+    <p class="kicker">序 · 耳机不见了</p>
+    <h2 class="chapter-title">周三晚上，<br />你把图书馆翻了一遍。</h2>
+    <p class="prose">晚上九点半，闭馆音乐响起。你摸向口袋——耳机不见了。你最后一次确定戴着它，是下午在<strong>图书馆</strong>四楼的自习区。折回去，沿着座位、桌面、书架的缝隙找了一遍。</p>
+    <div class="big-number"><strong>8</strong><span>分钟 · 一无所获</span></div>
+    <p class="prose">走出馆门的时候，一个念头冒了出来：<strong>「看来根本就不在图书馆。」</strong>这个念头听起来很自然，但它只对了一半——错的那一半，可以精确地算出来。</p>
+    <div class="search-journey" id="search-journey" aria-label="这次搜索的四个时刻">
+      <svg class="rope" aria-hidden="true" preserveAspectRatio="none">
+        <path class="rope-track" pathLength="1" d=""></path>
+        <path class="rope-fibre" pathLength="1" d=""></path>
+        <path class="rope-main" pathLength="1" d=""></path>
+      </svg>
+      <ol class="journey-steps">
+        <li class="journey-step"><span class="rope-knot">01</span><strong>下午 · 图书馆四楼</strong>你最后一次确定，耳机还挂在你耳朵上。</li>
+        <li class="journey-step"><span class="rope-knot">02</span><strong>晚上九点半</strong>闭馆音乐响起。你摸向口袋——是空的。</li>
+        <li class="journey-step"><span class="rope-knot">03</span><strong>折返 · 翻找一遍</strong>座位、桌面、书架缝隙，整整 8 分钟。</li>
+        <li class="journey-step"><span class="rope-knot">04</span><strong>走出馆门</strong>「看来，根本就不在图书馆。」——真的吗？</li>
+      </ol>
+    </div>
+    <p class="prose">先说清楚：耳机可能在哪里？按课程演示的设定，我们把校园简化成三个地点，并给出一组<strong>先验概率</strong>——搜索开始前，每个地点藏着你耳机的可能性。</p>
+    <div class="widget" id="prior-widget">
+      <div class="widget-head"><h3>先验：还没开始找的时候</h3><span class="hint">演示设定 · 可在 PART 02 中自行调整</span></div>
+      <div class="prior-bars">
+        <div class="prior-row bar-lib"><span>图书馆</span><span class="bar"><i data-w="40"></i></span><span class="val">40%</span></div>
+        <div class="prior-row bar-room"><span>教室</span><span class="bar"><i data-w="25"></i></span><span class="val">25%</span></div>
+        <div class="prior-row bar-caf"><span>食堂</span><span class="bar"><i data-w="35"></i></span><span class="val">35%</span></div>
+      </div>
+      <p class="readout">三地概率合计 100%。这一组数字，就是贝叶斯公式里的 P(A)。</p>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PART 01 ============ -->
+<div class="chapter-shell" id="instinct">
+  <section class="reading-width reading-chapter" data-paint-marker="grid">
+    <p class="kicker">PART 01 · 直觉的对错</p>
+    <h2 class="chapter-title">没找到，<em>等于</em>不在吗？</h2>
+      <p class="thesis">「能说明」的意思是：<strong>剩下的可能性是零。</strong><br />但搜索并不是完美的。</p>
+    <p class="prose">问题出在一个隐含的假设上：你以为「找过=翻遍了」。但真实的搜索有<strong>检出率</strong>——即使耳机真的在图书馆四楼的某个缝隙里，这一遍也只有七成把握把它找出来。</p>
+    <p class="prose">下面把全部可能性摆成 100 个小方格：金色是「在图书馆」的世界，绿色是「在教室」，橙色是「在食堂」。点一下按钮，让那次一无所获的搜索真实地发生一次。</p>
+    <div class="widget" id="world-widget">
+      <div class="widget-head">
+        <h3>100 个可能世界</h3>
+        <div class="pill-row">
+          <button class="pill" id="world-search" type="button">搜一遍图书馆（没找到）</button>
+          <button class="pill" id="world-reset" type="button" aria-pressed="false">重置</button>
+        </div>
+      </div>
+      <div class="world-grid" id="world-grid" role="img" aria-label="100 个方格表示耳机所在位置的全部可能世界"></div>
+      <div class="world-caption">
+        <span><i class="world-cell lib" aria-hidden="true"></i>在图书馆 · 40</span>
+        <span><i class="world-cell room" aria-hidden="true"></i>在教室 · 25</span>
+        <span><i class="world-cell caf" aria-hidden="true"></i>在食堂 · 35</span>
+      </div>
+      <p class="live-status" id="world-status" role="status">搜索尚未开始。100 个世界都还开着。</p>
+    </div>
+    <p class="prose">搜索失败后，金色世界<strong>没有被清空，只是变稀了</strong>：40 个「在图书馆」的世界里，检出率拿走了 70%，还剩 12 个。它们没有消失的理由——只是那一次没找到而已。<strong>失败削弱了「在图书馆」的可能，但没有把它减到零。</strong>至于「还剩多少」，这正是下一部分要算的。</p>
+  </section>
+</div>
+
+<!-- ============ PART 02 ============ -->
+<div class="chapter-shell" id="bayes">
+  <section class="reading-chapter" aria-labelledby="bayes-title">
+    <div class="reading-width">
+      <p class="kicker">PART 02 · 机制</p>
+      <h2 class="chapter-title" id="bayes-title">失败如何<em>改写</em>答案</h2>
+      <p class="thesis">失败不会推翻答案，<br />只会更新答案的<strong>概率</strong>。</p>
+      <p class="prose">这门课给「改写」起了名字：<strong>贝叶斯更新</strong>。向下阅读，左边这块屏幕会跟着你走完四次改写。</p>
+    </div>
+    <div class="reading-width mech" id="mech-reader" data-step="0">
+      <div class="mech-sticky">
+        <div class="mech-screen" role="img" aria-label="贝叶斯更新的四步示意画面">
+          <img class="mech-face" src="ajie-earphone.webp" alt="" loading="lazy" />
+          <div class="mech-screen-top"><span>贝叶斯更新 · 图书馆</span><span id="mech-count">01 / 04</span></div>
+          <div class="mech-scene">
+            <div class="mech-scene-layer" data-mech-scene="0">
+              <p class="note" style="margin-top:0">先验 P(A) —— 搜之前</p>
+              <div class="mini-bars">
+                <div class="prior-row bar-lib"><span>图书馆</span><span class="bar"><i style="width:40%"></i></span><span class="val">40%</span></div>
+                <div class="prior-row bar-room"><span>教室</span><span class="bar"><i style="width:25%"></i></span><span class="val">25%</span></div>
+                <div class="prior-row bar-caf"><span>食堂</span><span class="bar"><i style="width:35%"></i></span><span class="val">35%</span></div>
+              </div>
+            </div>
+            <div class="mech-scene-layer" data-mech-scene="1" hidden>
+              <p class="note" style="margin-top:0">检出率 p —— 搜的能力</p>
+              <div class="mech-big">p = 70%</div>
+              <p class="note">耳机真在图书馆时，这一遍有 70% 的把握找到它；反过来，<b style="color:var(--paper)">哪怕它真的在，也有 30% 的概率被漏掉</b>。这个 30%，就是失败之后那 12 个「在图书馆」世界仍然存在的原因。</p>
+            </div>
+            <div class="mech-scene-layer" data-mech-scene="2" hidden>
+              <p class="note" style="margin-top:0">失败的总概率 P(B) —— 全概率公式</p>
+              <div class="mech-math">
+                P(失败)<br />
+                <span class="f-sum">= <span class="f-num">0.120</span><span class="f-tag">馆</span> + <span class="f-num">0.250</span><span class="f-tag">教</span> + <span class="f-num">0.350</span><span class="f-tag">食</span></span><br />
+                <b style="color:var(--paper)">= 0.720</b>
+                <span class="f-line">= 0.4×0.3 ＋ 0.25 ＋ 0.35 · 在别处必然没找到</span>
+              </div>
+            </div>
+            <div class="mech-scene-layer" data-mech-scene="3" hidden>
+              <p class="note" style="margin-top:0">后验 P(A∣B) —— 贝叶斯公式</p>
+              <div class="mech-math">P(在图书馆∣失败) = 0.120 ÷ 0.720</div>
+              <div class="mech-big" id="mech-posterior">16.67%</div>
+              <p class="note">40% → 16.67%：跌去六成，但远远没有归零。</p>
+            </div>
+          </div>
+          <p class="mech-caption" id="mech-caption">先验：搜索开始前的信念</p>
+        </div>
+        <nav class="mech-route" aria-label="查看机制步骤">
+          <button class="mech-node" type="button" data-mech-step="0" aria-current="step"><span>01</span><strong>先验</strong></button>
+          <button class="mech-node" type="button" data-mech-step="1"><span>02</span><strong>检出率</strong></button>
+          <button class="mech-node" type="button" data-mech-step="2"><span>03</span><strong>证据</strong></button>
+          <button class="mech-node" type="button" data-mech-step="3"><span>04</span><strong>后验</strong></button>
+        </nav>
+        <p class="live-status mech-live" id="mech-live" role="status">当前步骤：先验</p>
+      </div>
+      <div class="mech-panels" id="mech-scroll">
+        <article class="mech-panel" id="mech-panel-0">
+          <h3><span class="step-no">01</span>先验：出发前的地图</h3>
+          <h4>开始计算之前，先有一个出发的概率。</h4>
+          <p>先验概率 P(A) 是搜索前的信念：图书馆 40%、教室 25%、食堂 35%。它不必精确——重要的是先给出一个明确的出发点，再允许它被修改。</p>
+        </article>
+        <article class="mech-panel" id="mech-panel-1">
+          <h3><span class="step-no">02</span>检出率：搜索不是扫描</h3>
+          <h4>「找过了」和「找遍了」，隔着 30% 的距离。</h4>
+          <p>检出率 p=70%，在课本里叫<strong>灵敏度</strong>：假设耳机真的在图书馆时，这一遍能找到它的概率。它永远小于 1——所以「没找到」永远有两种可能：要么不在，要么在但你没看见。</p>
+        </article>
+        <article class="mech-panel" id="mech-panel-2">
+          <h3><span class="step-no">03</span>证据：失败也需要定价</h3>
+          <h4>「没找到」本身是一个概率事件，由全概率公式汇总。</h4>
+          <p>P(失败) = 0.4×0.3 + 0.25 + 0.35 = <strong>0.72</strong>。注意分母里最大的一块不是图书馆——是那 60%「根本不在图书馆」的世界，在那里失败是必然的。</p>
+        </article>
+        <article class="mech-panel" id="mech-panel-3">
+          <h3><span class="step-no">04</span>后验：被证据改写过的信念</h3>
+          <h4>用「没找到」这个结果，算出更靠谱的新概率。</h4>
+          <p>贝叶斯公式：P(A∣B) = P(B∣A)·P(A) ÷ P(B) = 0.120 ÷ 0.720 = <strong>16.67%</strong>。信念从 40% 更新到 16.67%——这就是这次失败提供的全部信息。</p>
+        </article>
+      </div>
+    </div>
+    <div class="reading-width">
+      <div class="widget" id="calc-widget">
+        <div class="widget-head"><h3>亲手改一次参数</h3><span class="hint">拖动滑块，看后验如何回应</span></div>
+        <div class="calc-grid">
+          <div class="calc-controls">
+            <div class="calc-field">
+              <label for="calc-prior">先验 P(在图书馆) <output id="calc-prior-out" for="calc-prior">40%</output></label>
+              <input type="range" id="calc-prior" min="10" max="70" step="1" value="40" />
+            </div>
+            <div class="calc-field">
+              <label for="calc-det">检出率 p <output id="calc-det-out" for="calc-det">70%</output></label>
+              <input type="range" id="calc-det" min="20" max="99" step="1" value="70" />
+            </div>
+            <div class="pill-row calc-presets">
+              <button class="pill" type="button" data-preset="40,70" aria-pressed="true">课堂情境</button>
+              <button class="pill" type="button" data-preset="40,99" aria-pressed="false">近乎完美搜索</button>
+              <button class="pill" type="button" data-preset="40,30" aria-pressed="false">随手一翻</button>
+            </div>
+          </div>
+          <div class="calc-result">
+            <div class="mech-math">P(在图书馆∣失败) = <span class="f-num" id="calc-nume">0.120</span> ÷ <span class="f-num" id="calc-deno">0.720</span></div>
+            <div class="calc-posterior" id="calc-posterior">16.67%</div>
+            <p class="note calc-note" id="calc-note">把 p 拖到 99%：「没找到」才几乎等于「不在」——「能说明」这个直觉，其实要求搜索近乎完美。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PART 03 ============ -->
+<div class="chapter-shell" id="strategy">
+  <section class="reading-width reading-chapter" data-paint-marker="ledger">
+    <p class="kicker">PART 03 · 策略</p>
+    <h2 class="chapter-title">然后，去哪里<em>接着找？</em></h2>
+    <p class="thesis">更新完概率，搜索就变成了一个<strong>排序问题</strong>：<br />下一个该翻哪里？</p>
+    <p class="prose">图书馆失败后，三地的概率重新洗牌：食堂 48.6% > 教室 34.7% > 图书馆 16.7%（分母同前，均为 ÷0.72）。按直觉，下一站当然是最可能的食堂——<strong>但课程演示里的食堂，翻找把握只有 40%</strong>：人流密集、桌面杂物多、座位翻台快。把「在哪」和「找不找得到」相乘，排序立刻反转。亲手搜几次试试（都会失败，看概率如何一路更新）。</p>
+    <div class="widget" id="strategy-widget">
+      <div class="widget-head"><h3>搜索策略板</h3><span class="hint">每次搜索都会失败——看第 k 次失败后概率的走向</span></div>
+      <div class="strategy-board">
+        <div class="loc-card bar-lib" id="loc-lib" style="--loc-color:var(--gold)">
+          <h4>图书馆 <span class="opt-tag" data-opt-tag hidden>建议先搜</span></h4>
+          <dl>
+            <div><dt>在这里的概率</dt><dd data-loc="p">16.7%</dd></div>
+            <div><dt>翻找把握</dt><dd data-loc="d">70%</dd></div>
+            <div><dt>本轮期望（p×概率）</dt><dd data-loc="e">11.7%</dd></div>
+          </dl>
+          <span class="mini-track"><i data-loc="bar"></i></span>
+          <button class="ghost-button search-btn" type="button" data-search="0">搜这里</button>
+          <p class="p-fail" data-loc="fail"></p>
+        </div>
+        <div class="loc-card bar-room" id="loc-room" style="--loc-color:var(--mint)">
+          <h4>教室 <span class="opt-tag" data-opt-tag hidden>建议先搜</span></h4>
+          <dl>
+            <div><dt>在这里的概率</dt><dd data-loc="p">34.7%</dd></div>
+            <div><dt>翻找把握</dt><dd data-loc="d">70%</dd></div>
+            <div><dt>本轮期望（p×概率）</dt><dd data-loc="e">24.3%</dd></div>
+          </dl>
+          <span class="mini-track"><i data-loc="bar"></i></span>
+          <button class="ghost-button search-btn" type="button" data-search="1">搜这里</button>
+          <p class="p-fail" data-loc="fail"></p>
+        </div>
+        <div class="loc-card bar-caf" id="loc-caf" style="--loc-color:var(--coral)">
+          <h4>食堂 <span class="opt-tag" data-opt-tag hidden>建议先搜</span></h4>
+          <dl>
+            <div><dt>在这里的概率</dt><dd data-loc="p">48.6%</dd></div>
+            <div><dt>翻找把握</dt><dd data-loc="d">40%</dd></div>
+            <div><dt>本轮期望（p×概率）</dt><dd data-loc="e">19.4%</dd></div>
+          </dl>
+          <span class="mini-track"><i data-loc="bar"></i></span>
+          <button class="ghost-button search-btn" type="button" data-search="2">搜这里</button>
+          <p class="p-fail" data-loc="fail"></p>
+        </div>
+      </div>
+      <p class="live-status" id="strategy-live" role="status">图书馆已失败一次。下一站：教室——它不是最可能的，却是期望最高的。</p>
+      <div class="pill-row" style="margin-top:14px"><button class="pill" id="strategy-reset" type="button" aria-pressed="false">回到图书馆失败后</button></div>
+    </div>
+    <div class="vs-note">最容易混的两个数：<strong>「在这里的概率」回答在哪，「翻找把握」回答能不能找到</strong>。最优策略永远选乘积最大的那个地点——不是概率最大的那个。这正是问卷里 83 位同学勾选的难点：「分不清位置概率和找到概率」。</div>
+  </section>
+</div>
+
+<!-- ============ PART 04 ============ -->
+<div class="chapter-shell" id="evidence">
+  <section class="reading-chapter" aria-labelledby="evi-title" data-paint-marker="archive">
+    <div class="reading-width">
+      <p class="kicker">PART 04 · 证据</p>
+      <h2 class="chapter-title" id="evi-title">我们把这道题<br />给 <em>350</em> 个人做了一遍</h2>
+      <p class="thesis">同一批人，测了两遍，<br />中间只隔<strong>一次演示</strong>。</p>
+      <p class="prose">前面讲的机制是否真的对应人的直觉？我们设计了一份问卷：先用故事情境做<strong>前测</strong>，让答题者搜索、失败、给出判断和估计；再看一遍交互演示；最后用同样的题做<strong>后测</strong>。共回收 <strong>350</strong> 份有效问卷。下面所有数字都来自这份真实数据。</p>
+      <div class="method-card" role="group" aria-label="问卷方法说明">
+        <p class="method-line"><strong>样本</strong>：350 人（正在学习 181 · 已经学过 102 · 尚未学习 67），问卷星匿名作答。</p>
+        <p class="method-line"><strong>流程</strong>：知情同意 → 前测（判断 + 数值估计 + 策略）→ 交互演示 → 后测（同题复测）→ 迁移题。</p>
+        <p class="method-line"><strong>口径</strong>：数值未作答按缺失剔除（原始记录中以 999 标记）；「落在计算区间」指估计值在 14%–19% 之间（理论值 16.67%）。</p>
+        <p class="method-line"><strong>局限</strong>：方便样本、自愿参与，前后测非随机对照——数字用于教学演示，不构成严格因果推断。</p>
+      </div>
+    </div>
+
+    <div class="reading-width">
+      <div class="widget" id="compare-widget">
+        <div class="widget-head"><h3>前测 → 后测：四个数字的变化</h3><span class="hint">同一批人，看完演示之后</span></div>
+        <div>
+          <div class="compare-row">
+            <div class="compare-label"><span>答「不能说明不在图书馆」</span><span class="duo"><i class="duo-pre" data-w="72.6"></i><i class="duo-post" data-w="88"></i></span></div>
+            <span class="val" data-pre="254">72.6%</span><span class="val up" data-post="308">88.0% ↑</span>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label"><span>估计落在计算区间 14%–19%</span><span class="duo"><i class="duo-pre" data-w="20.3"></i><i class="duo-post" data-w="36.3"></i></span></div>
+            <span class="val" data-pre="71">20.3%</span><span class="val up" data-post="127">36.3% ↑</span>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label"><span>把估计答成整十数或 0</span><span class="duo"><i class="duo-pre" data-w="65.1"></i><i class="duo-post" data-w="43.1"></i></span></div>
+            <span class="val" data-pre="228">65.1%</span><span class="val down" data-post="151">43.1% ↓</span>
+          </div>
+          <div class="compare-row">
+            <div class="compare-label"><span>对自己估计的平均把握度</span><span class="duo"><i class="duo-pre" data-w="61.5"></i><i class="duo-post" data-w="70.2"></i></span></div>
+            <span class="val" data-pre="61.5">61.5 分</span><span class="val up" data-post="70.2">70.2 分 ↑</span>
+          </div>
+        </div>
+        <p class="readout" style="margin-top:14px">直觉并非全错：前测里就有 72.6% 的人知道「不能说明」。缺的是另一半——<strong style="color:var(--gold)">把直觉换成数字的能力</strong>，这正是看完演示后变化最大的部分。</p>
+      </div>
+
+      <div class="widget" id="flip-widget">
+        <div class="widget-head"><h3>谁改变了主意</h3><span class="hint">前后测判断的逐人配对（n = 350）</span></div>
+        <div class="flip-matrix" id="flip-matrix">
+          <div class="flip-line"><span>不能说明 → 不能说明</span><span class="bar"><i data-w="229"></i></span><span class="cnt">229</span></div>
+          <div class="flip-line gained"><span>能说明 → 不能说明</span><span class="bar"><i data-w="55"></i></span><span class="cnt">55</span></div>
+          <div class="flip-line gained"><span>不确定 → 不能说明</span><span class="bar"><i data-w="24"></i></span><span class="cnt">24</span></div>
+          <div class="flip-line lost"><span>不能说明 → 能说明</span><span class="bar"><i data-w="15"></i></span><span class="cnt">15</span></div>
+          <div class="flip-line"><span>能说明 → 能说明</span><span class="bar"><i data-w="7"></i></span><span class="cnt">7</span></div>
+          <div class="flip-line"><span>不能说明 → 不确定</span><span class="bar"><i data-w="10"></i></span><span class="cnt">10</span></div>
+          <div class="flip-line"><span>其余路径</span><span class="bar"><i data-w="10"></i></span><span class="cnt">10</span></div>
+        </div>
+        <p class="readout" style="margin-top:14px">绿色的 79 位，是演示真正说服的人；红色的 15 位改变了主意，却换到了另一侧；其余 256 位停在原地。教学从来不是一次 100% 检出率的搜索。</p>
+      </div>
+
+      <div class="widget" id="hist-widget">
+        <div class="widget-head"><h3>「你觉得还剩多少？」——估计的分布</h3><span class="hint">理论值 16.67%，金色为计算区间 14%–19%</span></div>
+        <div class="hist-block">
+          <div class="hist" id="hist-pre"><span class="hist-title">前测</span><div class="hist-cols" role="img" aria-label="前测估计分布直方图"></div></div>
+          <div class="hist post" id="hist-post"><span class="hist-title">后测</span><div class="hist-cols" role="img" aria-label="后测估计分布直方图"></div></div>
+          <div class="hist-x" aria-hidden="true"><span>0</span><span>1–9</span><span>10–13</span><span>14–19</span><span>20–29</span><span>30+</span></div>
+          <p class="hist-band-note">金色柱即计算区间：前测 71 人（20.3%）→ 后测 127 人（36.3%）。答「0」的人从 45 位降到 29 位——「失败归零」的直觉在被一点点修正。</p>
+        </div>
+      </div>
+
+      <div class="widget" id="demo-widget">
+        <div class="widget-head"><h3>演示本身有效吗</h3><span class="hint">按「是否完整完成演示」分组</span></div>
+        <div class="demo-split">
+          <div><div class="pct">41.7%</div><p class="who">完整完成演示（271 人）——后测估计落在计算区间的比例</p></div>
+          <div><div class="pct" style="color:var(--slate)">17.7%</div><p class="who">尚未完成演示（79 人）——同一比例，差距 2.4 倍</p></div>
+        </div>
+        <p class="readout" style="margin-top:14px">变化主要发生在真正「玩过那一次搜索」的人身上。</p>
+      </div>
+
+      <div class="widget" id="flow-widget">
+        <div class="widget-head"><h3>下一站去哪：策略的迁移</h3><span class="hint">前测再搜地点 → 后测再搜地点</span></div>
+        <svg class="flow-svg" id="flow-svg" viewBox="0 0 900 330" role="img" aria-label="前后测再搜地点流向图：食堂到教室的流动最大"></svg>
+        <div class="flow-legend">
+          <span><i style="background:var(--gold)"></i>图书馆</span>
+          <span><i style="background:var(--mint)"></i>教室</span>
+          <span><i style="background:var(--coral)"></i>食堂</span>
+          <span><i style="background:var(--slate)"></i>不确定</span>
+          <span>前测分散（食堂 158 · 教室 120）→ 后测 55.7% 集中选择教室</span>
+        </div>
+        <p class="readout" style="margin-top:12px">最大的流动是<strong style="color:var(--gold)">食堂 → 教室（86 人）</strong>：看懂了「最可能 ≠ 最该先搜」的人，把策略真的换掉了。</p>
+      </div>
+
+      <div class="widget" id="board-widget">
+        <div class="widget-head"><h3>350 位答题者</h3><span class="hint">悬停或键盘聚焦每一份答卷</span></div>
+        <div class="archive-board" id="archive-board" role="group" aria-label="350 份问卷答卷一览"></div>
+        <div class="board-legend">
+          <span><i style="background:var(--gold)"></i>后测估计落在计算区间（127 人）</span>
+          <span><i style="background:rgba(127,154,171,.5)"></i>区间之外</span>
+          <span><i style="background:transparent;outline:2px solid var(--mint);outline-offset:-2px"></i>前后测判断发生了改变（113 人）</span>
+        </div>
+      </div>
+
+      <div class="widget" id="hard-widget">
+        <div class="widget-head"><h3>他们卡在哪一步</h3><span class="hint">南丁格尔玫瑰 · 每人限选一项 · 悬停花瓣查看人数</span></div>
+        <div class="rose-wrap">
+          <svg id="hard-rose" viewBox="0 0 640 580" role="img" aria-label="南丁格尔玫瑰图：350 名答题者自述最难理解一步的人数分布，花瓣半径与人数的平方根成正比"></svg>
+          <div class="rose-side">
+            <ul class="rose-legend" id="rose-legend"></ul>
+            <p class="note rose-note">难点的分布几乎就是本页的目录——问卷反过来验证了叙事的顺序。演示帮助度均分 <strong style="color:var(--gold)">3.56 / 5</strong>（127 人给 4 分，73 人给 5 分）。</p>
+          </div>
+        </div>
+        <p class="live-status" id="rose-readout" role="status" style="margin-top:16px">悬停或用键盘聚焦花瓣，查看每一步的人数与占比。</p>
+        <p class="readout" style="margin-top:8px">迁移题中，绝大多数人（活动室 140 人 · 实验室 124 人）没有直接奔向任何一个「想当然」的地点；在回答了操场后验估计的 304 人里，中位数为 14.4%——<strong style="color:var(--gold)">策略和数字，都跟着他们走出了这道题</strong>。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 尾声 ============ -->
+<div class="chapter-shell" id="ending">
+  <section class="reading-width reading-chapter finale" data-paint-marker="dawn">
+    <p class="kicker">尾声 · 失败是证据</p>
+    <h2 class="chapter-title">回来对个答案</h2>
+    <div class="you-box" id="you-box">
+      <h3>你刚才的那次搜索</h3>
+      <p id="you-copy">你还没有替自己搜一次。<a href="#top" id="you-golink">回到封面 ↗</a>，先接一次那通「搜索」，再回来。</p>
+    </div>
+    <p class="finale-sentence" id="finale-sentence">
+      <span class="fin-line">失败不是结论，<em>是证据</em>。</span>
+      <span class="fin-line">概率论不保证你找到耳机，</span>
+      <span class="fin-line">它保证的是：没找到之后，</span>
+      <span class="fin-line">你仍然知道<em>下一步去哪里</em>。</span>
+    </p>
+    <svg class="gold-thread" viewBox="0 0 1200 64" preserveAspectRatio="none" aria-hidden="true">
+      <path class="thread-base" d="M0 38 C 140 8, 290 58, 450 34 S 740 6, 900 42 S 1110 30, 1200 22"></path>
+      <path class="thread-glow" d="M0 38 C 140 8, 290 58, 450 34 S 740 6, 900 42 S 1110 30, 1200 22"></path>
+    </svg>
+    <div class="replay-row">
+      <button class="action-button" id="replay-search" type="button">带着新的判断，再找一次 <span>↗</span></button>
+      <a class="quiet-link" href="#top">回到封面 ↑</a>
+    </div>
+    <div class="appendix" id="appendix">
+      <h3>公式速查</h3>
+      <p>全概率公式：P(B) = Σ P(B∣Aᵢ)·P(Aᵢ)。本题中 P(失败) = 0.4×0.3 + 0.25 + 0.35 = 0.72。</p>
+      <p>贝叶斯公式：P(Aᵢ∣B) = P(B∣Aᵢ)·P(Aᵢ) ÷ P(B)。本题中 P(在图书馆∣失败) = 0.12 ÷ 0.72 = 16.67%。</p>
+      <p>最优搜索排序：按 P(在∣历史) × p(找到) 降序逐点搜索——贝叶斯搜索理论（Bayesian search theory）正是这样用于搜寻失踪船只与飞行记录仪的。</p>
+      <h3>术语表</h3>
+      <div class="glossary">
+        <div><b>先验 P(A)</b>：证据到来之前对假设的信念。</div>
+        <div><b>后验 P(A∣B)</b>：证据到来之后被改写的信念。</div>
+        <div><b>检出率（灵敏度）</b>：假设为真时，搜索能兑现的证据概率 p。</div>
+        <div><b>条件概率</b>：在 B 已发生的前提下 A 的概率，本页每一行都在算它。</div>
+        <div><b>期望</b>：p × 概率，策略排序的依据。</div>
+        <div><b>归一化</b>：更新后让全部假设的概率重新加和为 1（除以分母 0.72）。</div>
+      </div>
+      <h3>数据附注</h3>
+      <ul>
+        <li>问卷共 350 份；前测→交互演示→后测的配对设计；正在学习 181 人、已经学过 102 人、尚未学习 67 人。</li>
+        <li>数值题未作答按缺失处理（原始记录以 999 标记）：前测后验估计缺失 29 人，后测缺失 39 人，迁移题操场后验缺失 46 人。</li>
+        <li>演示参数为教学设定：先验 图书馆 40% / 教室 25% / 食堂 35%；检出率 图书馆 70% / 教室 70% / 食堂 40%。后测中位数（17%）与理论后验 16.67% 吻合。</li>
+        <li>局限：方便样本、自愿参与、非随机对照；分组比较（完成/未完成演示）存在自选择偏差，解读时应保持克制。</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 开场搜索 dialog ============ -->
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="dialog-title">
+  <div class="dialog-body">
+    <div class="dialog-top">
+      <h2 id="dialog-title">替你找一次耳机</h2>
+      <span class="clock" id="dialog-clock"></span>
+      <button class="dialog-close" id="dialog-close" type="button" aria-label="关闭">×</button>
+    </div>
+    <p class="dialog-copy" id="dialog-copy">周三晚上九点半。你摸向口袋——耳机不见了。你会先去哪里找？</p>
+    <svg class="campus-map" id="campus-map" viewBox="0 0 560 190" aria-hidden="true">
+      <g>
+        <rect class="loc-rect" data-loc="0" x="20" y="30" width="150" height="120" rx="6"/>
+        <text class="loc-label" x="95" y="82" text-anchor="middle">图书馆</text>
+        <text class="loc-sub" x="95" y="110" text-anchor="middle">先验 40% · 检出 70%</text>
+      </g>
+      <g>
+        <rect class="loc-rect" data-loc="1" x="205" y="30" width="150" height="120" rx="6"/>
+        <text class="loc-label" x="280" y="82" text-anchor="middle">教室</text>
+        <text class="loc-sub" x="280" y="110" text-anchor="middle">先验 25% · 检出 70%</text>
+      </g>
+      <g>
+        <rect class="loc-rect" data-loc="2" x="390" y="30" width="150" height="120" rx="6"/>
+        <text class="loc-label" x="465" y="82" text-anchor="middle">食堂</text>
+        <text class="loc-sub" x="465" y="110" text-anchor="middle">先验 35% · 检出 40%</text>
+      </g>
+    </svg>
+    <div class="dialog-options" id="dialog-options"></div>
+    <p class="dialog-status" id="dialog-status" role="status"></p>
+    <div class="response-panel" id="dialog-response" hidden>
+      <span class="response-state" id="response-state" data-mood="neutral">模拟搜索 · 已结束</span>
+      <h3 class="response-title" id="response-title"></h3>
+      <p class="response-copy" id="response-copy"></p>
+      <div class="response-actions">
+        <button class="action-button" id="enter-story" type="button">带着直觉开始阅读 <span>↓</span></button>
+        <button class="text-action" id="try-again" type="button">再找一次 ↗</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ============ 答卷详情 dialog ============ -->
+<dialog class="person-dialog" id="person-dialog" aria-labelledby="person-title">
+  <div class="person-body">
+    <button class="dialog-close" id="person-close" type="button" aria-label="关闭答卷详情">×</button>
+    <p class="kicker" id="person-kicker" style="margin-bottom:6px"></p>
+    <h3 id="person-title" tabindex="-1"></h3>
+    <dl class="person-facts">
+      <div><dt>学习阶段 / 演示</dt><dd id="pf-stage"></dd></div>
+      <div><dt>判断（前测 → 后测）</dt><dd id="pf-belief"></dd></div>
+      <div><dt>估计（前测 → 后测）</dt><dd id="pf-est"></dd></div>
+      <div><dt>再搜地点（前测 → 后测）</dt><dd id="pf-next"></dd></div>
+      <div><dt>把握度（前测 → 后测）</dt><dd id="pf-conf"></dd></div>
+    </dl>
+    <p class="note" id="pf-note" style="margin-top:16px"></p>
+  </div>
+</dialog>
+
+<script src="data.js?v=2"></script>
+<script src="story.js?v=4"></script>
+</body>
+</html>
