@@ -152,13 +152,15 @@ window.addEventListener("error", e => { window.__storyErrors.push(e.message + " 
       });
       svg.setAttribute("viewBox", `0 0 ${Math.round(r.width)} ${Math.round(r.height)}`);
       const route = off => {
+        // 从 01 的绳结圆心出发，依次连到 02/03/04——不在结外绕弯，结内由实底色遮住
         const first = points[0];
-        let d = `M ${first.x + off} 6`, last = { x: first.x, y: 6 };
-        points.forEach(p => {
-          const dy = (p.y - last.y) * 0.52;
-          d += ` C ${last.x + off - 18} ${last.y + dy}, ${p.x + off + 16} ${p.y - dy}, ${p.x + off} ${p.y}`;
+        let d = `M ${first.x + off} ${first.y}`, last = first;
+        for (let i = 1; i < points.length; i++) {
+          const p = points[i];
+          const dy = (p.y - last.y) * 0.4;
+          d += ` C ${last.x + off + 24} ${last.y}, ${p.x + off - 24} ${p.y}, ${p.x + off} ${p.y}`;
           last = p;
-        });
+        }
         return d;
       };
       main.setAttribute("d", route(0));

@@ -178,24 +178,25 @@ h1.cover-title em::after {
 
 /* ---------- 序章麻绳旅程（随滚动描线） ---------- */
 .search-journey { position: relative; margin-top: 48px; }
-.search-journey svg.rope { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-.rope-track { stroke: rgba(241, 210, 156, 0.30); fill: none; stroke-width: 2.5; }
-.rope-fibre { stroke: rgba(241, 210, 156, 0.18); fill: none; stroke-width: 1.2; }
+.search-journey svg.rope { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 0; }
+.rope-track { stroke: rgba(241, 210, 156, 0.30); fill: none; stroke-width: 1.6; }
+.rope-fibre { stroke: rgba(241, 210, 156, 0.16); fill: none; stroke-width: 1; }
 .rope-main {
-  stroke: var(--gold); fill: none; stroke-width: 2.5; stroke-linecap: round;
+  stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round;
   stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--rope-progress, 0));
 }
-.journey-steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; list-style: none; margin: 0; padding: 6px 0 0; }
+.journey-steps { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; list-style: none; margin: 0; padding: 6px 0 0; }
 .journey-step { color: var(--muted); font-size: 16.5px; line-height: 1.75; opacity: 0.4; transition: opacity 0.5s ease; }
 .journey-step strong { display: block; color: var(--paper); font-size: 18.5px; margin: 12px 0 2px; }
 .rope-knot {
   display: inline-flex; align-items: center; justify-content: center;
   width: 46px; height: 46px; border-radius: 50%;
-  border: 2px solid rgba(241, 210, 156, 0.45); color: var(--gold); font-weight: 700; font-size: 17px; line-height: 1;
-  transition: background 0.4s ease, border-color 0.4s ease;
+  border: 2px solid rgba(241, 210, 156, 0.45); color: var(--gold); font-weight: 700; font-size: 16px; line-height: 1; letter-spacing: 0.04em;
+  background: #16232f; /* 实底：绳线不再穿过数字 */
+  transition: border-color 0.4s ease;
 }
 .journey-step.is-traced { opacity: 1; }
-.journey-step.is-traced .rope-knot { background: rgba(227, 183, 110, 0.16); border-color: var(--gold); }
+.journey-step.is-traced .rope-knot { border-color: var(--gold); box-shadow: inset 0 0 0 44px rgba(227, 183, 110, 0.16); }
 @media (max-width: 760px) {
   .journey-steps { grid-template-columns: 1fr 1fr; gap: 20px; }
   .search-journey svg.rope { display: none; }
@@ -251,7 +252,7 @@ h1.cover-title em::after {
 .mech { display: grid; grid-template-columns: minmax(320px, 0.92fr) minmax(400px, 1.08fr); gap: clamp(24px, 4vw, 72px); align-items: start; }
 .mech-sticky { position: sticky; top: 86px; }
 .mech-screen {
-  position: relative; padding: clamp(20px, 2.6vw, 34px); min-height: 430px;
+  position: relative; padding: clamp(20px, 2.6vw, 34px); height: 500px;
   background: rgba(16, 27, 37, 0.66); border: 1px solid var(--rule); overflow: hidden;
 }
 .mech-screen .mech-face {
@@ -512,7 +513,7 @@ html.no-js .reveal { opacity: 1; transform: none; }
   .preview-bar .bar-meta { display: none; }
   .prior-row { grid-template-columns: 4em 1fr 3.6em; font-size: 15.5px; }
   .world-grid { max-width: 100%; }
-  .mech-screen { min-height: 0; }
+  .mech-screen { height: auto; min-height: 430px; }
 }
 
 /* ---------- 减少动效 ---------- */
